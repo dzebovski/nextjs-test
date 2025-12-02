@@ -57,6 +57,9 @@ if (!globalThis.__mongooseConnection) {
  * connection is created per server instance.
  */
 export async function connectToDatabase(): Promise<Mongoose> {
+  // Log the MongoDB URI to verify it's being read correctly
+  console.log("Connecting to MongoDB with URI:", MONGODB_URI);
+
   // If a connection already exists, reuse it.
   if (cached.conn) {
     return cached.conn;

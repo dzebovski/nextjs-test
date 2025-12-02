@@ -142,8 +142,12 @@ export async function GET() {
       { status: 200 },
     );
   } catch (e) {
+    console.error("Error fetching events:", e); // Log the full error to the server console
     return NextResponse.json(
-      { message: "Event fetch failed.", error: e },
+      {
+        message: "Event fetch failed.",
+        error: e instanceof Error ? e.message : "Unknown error",
+      },
       { status: 500 },
     );
   }
