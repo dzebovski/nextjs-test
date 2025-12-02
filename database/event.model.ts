@@ -120,10 +120,8 @@ const eventSchema = new Schema<
     },
     slug: {
       type: String,
-      required: [true, "Event slug is required"],
       unique: true,
       trim: true,
-      maxlength: [250, "Event slug cannot exceed 250 characters"],
     },
     description: {
       type: String,
