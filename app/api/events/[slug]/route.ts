@@ -38,11 +38,13 @@ export async function GET(
 
     // Basic slug format validation (alphanumeric and hyphens only)
     const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
     if (!slugPattern.test(slug)) {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid slug format. Slug must contain only lowercase letters, numbers, and hyphens.",
+          error:
+            "Invalid slug format. Slug must contain only lowercase letters, numbers, and hyphens.",
         },
         { status: 400 },
       );

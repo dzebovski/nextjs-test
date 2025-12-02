@@ -91,23 +91,3 @@ export async function GET() {
     );
   }
 }
-
-export async function GET_SLUG() {
-  try {
-    await connectToDatabase();
-
-    const eventsSlugs = await Event.find()
-      .select("slug")
-      .sort({ createdAt: -1 });
-
-    return NextResponse.json(
-      { message: "Events SLUGS fetched successfully", eventsSlugs },
-      { status: 200 },
-    );
-  } catch (e) {
-    return NextResponse.json(
-      { message: "Event SLUGS fetch failed.", error: e },
-      { status: 500 },
-    );
-  }
-}

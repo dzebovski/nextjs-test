@@ -4,15 +4,15 @@ import { useRef, useEffect, useState } from "react";
 import { Renderer, Program, Triangle, Mesh } from "ogl";
 
 export type RaysOrigin =
-| "top-center"
-| "top-center-offset"
-| "top-left"
-| "top-right"
-| "right"
-| "left"
-| "bottom-center"
-| "bottom-right"
-| "bottom-left";
+  | "top-center"
+  | "top-center-offset"
+  | "top-left"
+  | "top-right"
+  | "right"
+  | "left"
+  | "bottom-center"
+  | "bottom-right"
+  | "bottom-left";
 
 interface LightRaysProps {
   raysOrigin?: RaysOrigin;
@@ -36,17 +36,17 @@ const hexToRgb = (hex: string): [number, number, number] => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return m
     ? [
-      parseInt(m[1], 16) / 255,
-      parseInt(m[2], 16) / 255,
-      parseInt(m[3], 16) / 255,
-    ]
+        parseInt(m[1], 16) / 255,
+        parseInt(m[2], 16) / 255,
+        parseInt(m[3], 16) / 255,
+      ]
     : [1, 1, 1];
 };
 
 const getAnchorAndDir = (
-    origin: RaysOrigin,
+  origin: RaysOrigin,
   w: number,
-  h: number
+  h: number,
 ): { anchor: [number, number]; dir: [number, number] } => {
   const outside = 0.2;
   switch (origin) {
@@ -90,20 +90,20 @@ interface Uniforms {
 }
 
 const LightRays: React.FC<LightRaysProps> = ({
-                                               raysOrigin = "top-center",
-                                               raysColor = DEFAULT_COLOR,
-                                               raysSpeed = 1,
-                                               lightSpread = 1,
-                                               rayLength = 2,
-                                               pulsating = false,
-                                               fadeDistance = 1.0,
-                                               saturation = 1.0,
-                                               followMouse = true,
-                                               mouseInfluence = 0.1,
-                                               noiseAmount = 0.0,
-                                               distortion = 0.0,
-                                               className = "",
-                                             }) => {
+  raysOrigin = "top-center",
+  raysColor = DEFAULT_COLOR,
+  raysSpeed = 1,
+  lightSpread = 1,
+  rayLength = 2,
+  pulsating = false,
+  fadeDistance = 1.0,
+  saturation = 1.0,
+  followMouse = true,
+  mouseInfluence = 0.1,
+  noiseAmount = 0.0,
+  distortion = 0.0,
+  className = "",
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const uniformsRef = useRef<Uniforms | null>(null);
   const rendererRef = useRef<Renderer | null>(null);
@@ -123,7 +123,7 @@ const LightRays: React.FC<LightRaysProps> = ({
         const entry = entries[0];
         setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     observerRef.current.observe(containerRef.current);
@@ -287,6 +287,7 @@ void main() {
         noiseAmount: { value: noiseAmount },
         distortion: { value: distortion },
       };
+
       uniformsRef.current = uniforms;
 
       const geometry = new Triangle(gl);
