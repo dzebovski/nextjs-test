@@ -72,16 +72,19 @@ const bookingSchema = new Schema<
   },
 );
 
-// Index on eventId improves lookup performance for event-specific bookings.
+// Index on eventId for faster queries.
 bookingSchema.index({ eventId: 1 });
 
-// Index on email for user-specific booking lookups.
+// Compound index for common queries (event bookings by date).
+bookingSchema.index({ eventId: 1, createdAt: -1 });
+
+// Index on email for user booking lookups.
 bookingSchema.index({ email: 1 });
 
-// Compound index to prevent duplicate bookings (one email per event).
-bookingSchema.index({ eventId: 1, email: 1 }, { unique: true });
+// Enforce one booking per event per email.
+bookingSchema.index({ eventId: 1, email: 1 }, { unique: true, name: "uniq_event_email" });
 
-// Pre-save hook: ensure referenced event exists and email is well-formed.
+// Pre-save hook: ensure a referenced event exists and email is well-formed.
 bookingSchema.pre<BookingDocument>("save", async function preSaveBooking() {
   if (!EMAIL_REGEX.test(this.email)) {
     throw new Error("Invalid email address.");
@@ -90,9 +93,7 @@ bookingSchema.pre<BookingDocument>("save", async function preSaveBooking() {
   const eventExists = await Event.exists({ _id: this.eventId }).lean();
 
   if (!eventExists) {
-    throw new Error(
-      "Cannot create booking: referenced event does not exist.",
-    );
+    throw new Error("Cannot create booking: referenced event does not exist.");
   }
 });
 
