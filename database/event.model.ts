@@ -23,6 +23,8 @@ export interface EventAttrs {
   agenda: string[];
   organizer: string;
   tags: string[];
+  // optional ownership metadata (e.g., user id/email or the string "apiKey")
+  createdBy?: string;
 }
 
 // Document type persisted in MongoDB (includes timestamps and non-optional slug).
@@ -193,6 +195,11 @@ const eventSchema = new Schema<
     tags: {
       type: [String],
       default: [],
+    },
+    createdBy: {
+      type: String,
+      trim: true,
+      maxlength: [200, "createdBy cannot exceed 200 characters"],
     },
   },
   {

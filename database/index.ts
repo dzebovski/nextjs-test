@@ -5,6 +5,7 @@ export {
   type EventModel,
   type EventQueryHelpers,
 } from "./event.model";
+
 export {
   Booking,
   type BookingAttrs,
