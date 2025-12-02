@@ -6,17 +6,16 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
 
-    const formData = await req.formData();
-
     let event;
 
     try {
+      const formData = await req.formData();
       event = Object.fromEntries(formData.entries());
     } catch (e) {
       return NextResponse.json(
         {
-          message: "Invalid JSON format data.",
-          error: e instanceof Error ? e.message : "Unknown JSON format error",
+          message: "Invalid form data.",
+          error: e instanceof Error ? e.message : "Unable to parse form data",
         },
         { status: 400 },
       );
