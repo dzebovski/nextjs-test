@@ -3,9 +3,9 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { Event } from "@/database";
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 /**
@@ -23,7 +23,7 @@ export async function GET(
 ): Promise<NextResponse> {
   try {
     // Extract slug from route params
-    const { slug } = context.params;
+    const { slug } = await context.params;
 
     // Validate slug parameter
     if (!slug || typeof slug !== "string" || slug.trim().length === 0) {

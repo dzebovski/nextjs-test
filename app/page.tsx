@@ -4,9 +4,32 @@ import { EventDocument } from "@/database";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
+if (!BASE_URL) {
+  throw new Error(
+    "NEXT_PUBLIC_BASE_URL environment variable is required and must be set.",
+  );
+}
+
 const Page = async () => {
-  const response = await fetch(`${BASE_URL}/api/events`);
-  const { events } = await response.json();
+  let events: EventDocument[] = []; // Default to an empty array
+
+  try {
+    const response = await fetch(`${BASE_URL}/api/events`, {
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
+    });
+
+    if (!response.ok) {
+      // Log the error for debugging, but don't crash the page
+      console.error(`HTTP error! status: ${response.status}`);
+    } else {
+      const data = await response.json();
+      events = data.events || []; // Ensure events is an array
+    }
+  } catch (error) {
+    // Log the error for debugging
+    console.error("Failed to fetch events:", error);
+    // The page will render with an empty events array
+  }
 
   return (
     <section>
